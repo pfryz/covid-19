@@ -407,20 +407,22 @@ read_data_wiki <- function() {
 	
 	gsub(",", "", dd[[13]]) -> cases_str
 	n <- length(cases_str)
-	cases_int <- as.numeric(cases_str[2:(n-2)])
+	cases_int <- as.numeric(cases_str[2:(n-4)])
 
 	gsub(",", "", dd[[18]]) -> tested_str
-	tested_int <- c(rep(0, 6), diff(as.numeric(tested_str[7:(n-2)])))
+	gsub("b", "", tested_str) -> tested_str
+	tested_int <- c(rep(0, 6), diff(as.numeric(tested_str[7:(n-4)])))
 
-	tested_actual <- tested_int[7:(n-3)]
-	cases_actual <- cases_int[7:(n-3)]
+	tested_actual <- tested_int[7:(n-5)]
+	cases_actual <- cases_int[7:(n-5)]
 
 	gsub(",", "", dd[[15]]) -> deaths_str
-	deaths_actual <- as.numeric(deaths_str[15:(n-2)])
+	deaths_actual <- as.numeric(deaths_str[15:(n-5)])
+	
+	m <- length(deaths_actual)
+	if (is.na(deaths_actual[m])) deaths_actual <- deaths_actual[1:(m-1)]
 	
 	deaths_actual[which(is.na(deaths_actual))] <- 0
-	tested_actual <- tested_int[7:(n-3)]
-	cases_actual <- cases_int[7:(n-3)]
 	
 	list(tested_actual=tested_actual, cases_actual=cases_actual, deaths_actual=deaths_actual)
 	
@@ -460,20 +462,23 @@ read_data_emma_secure <- function() {
 
 read_data_covid <- function() {
 	
-	d_emma <- read_data_emma_secure()
+#	d_emma <- read_data_emma_secure()
 	d_wiki <- read_data_wiki_secure()
 		
-	if (length(d_emma$deaths_actual) > length(d_wiki$deaths_actual))
-		deaths_actual <- d_emma$deaths_actual
-	else deaths_actual <- d_wiki$deaths_actual	
+#	if (length(d_emma$deaths_actual) > length(d_wiki$deaths_actual))
+#		deaths_actual <- d_emma$deaths_actual
+#	else 
+	deaths_actual <- d_wiki$deaths_actual	
 
-	if (length(d_emma$cases_actual) > length(d_wiki$cases_actual))
-		cases_actual <- d_emma$cases_actual
-	else cases_actual <- d_wiki$cases_actual	
+#	if (length(d_emma$cases_actual) > length(d_wiki$cases_actual))
+#		cases_actual <- d_emma$cases_actual
+#	else 
+	cases_actual <- d_wiki$cases_actual	
 
-	if (length(d_emma$tested_actual) > length(d_wiki$tested_actual))
-		tested_actual <- d_emma$tested_actual
-	else tested_actual <- d_wiki$tested_actual	
+#	if (length(d_emma$tested_actual) > length(d_wiki$tested_actual))
+#		tested_actual <- d_emma$tested_actual
+#	else 
+	tested_actual <- d_wiki$tested_actual	
 	
 	
 	list(tested_actual=tested_actual, cases_actual=cases_actual, deaths_actual=deaths_actual)
@@ -482,7 +487,24 @@ read_data_covid <- function() {
 
 
 
+robust.not <- function(x, tries = 9, num.zero = 10^(-10)) {
+	
+	cpts <- rep(0, tries)
+	
+	sols <- matrix(0, tries, length(x))
+	
+	
+	
+	for (i in 1:tries) {
+		sols[i,] <- predict(not(x, contrast="pcwsLinContMean"))
+		cpts[i] <- sum(abs(diff(diff(sols[i,]))) > num.zero)
+		
+	}
 
+	no.of.cpt <- sort(cpts)[ceiling(tries/2)]
+	sols[which.min(abs(cpts - no.of.cpt)), ]
+
+}
 
 
 
@@ -504,7 +526,7 @@ fcast_cases <- function() {
 	tested_fit_tv <- round(as.numeric(tested_fit_fcast_tv$fitted))
 	tested_fcast_tv <- clipped(round(as.numeric(tested_fit_fcast_tv$mean)), 0, Inf)
 	
-	tested_fit_pl <- predict(not(tested_actual, contrast="pcwsLinContMean"))
+	tested_fit_pl <- robust.not(tested_actual)
 	tested_fcast_pl <- clipped(round(2 * tested_fit_pl[n] - tested_fit_pl[n-1]), 0, Inf)
 
 
@@ -515,7 +537,7 @@ fcast_cases <- function() {
 	prop_fit_tv <- as.numeric(prop_fit_fcast_tv$fitted)
 	prop_fcast_tv <- clipped(as.numeric(prop_fit_fcast_tv$mean), 0, 1)
 
-	prop_fit_pl <- predict(not(prop_actual, contrast="pcwsLinContMean"))
+	prop_fit_pl <- robust.not(prop_actual)
 	prop_fcast_pl <- clipped(2 * prop_fit_pl[n] - prop_fit_pl[n-1], 0, 1)
 	
 	
