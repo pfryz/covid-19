@@ -405,17 +405,20 @@ read_data_wiki <- function() {
 		
 	}
 	
-	gsub(",", "", dd[[13]]) -> cases_str
+	cases_str <- str_remove_all(dd[[13]], "[,abcdefghijklmnopqrstuvwxyz]")
+#	gsub(",", "", dd[[13]]) -> cases_str
 	n <- length(cases_str)
 	cases_int <- as.numeric(cases_str[2:(n-4)])
 
-	gsub(",", "", dd[[20]]) -> tested_str
-	gsub("a", "", tested_str) -> tested_str
-	gsub("b", "", tested_str) -> tested_str
-	gsub("c", "", tested_str) -> tested_str
-	gsub("d", "", tested_str) -> tested_str
-	gsub("e", "", tested_str) -> tested_str
-	gsub("f", "", tested_str) -> tested_str
+	tested_str <- str_remove_all(dd[[20]], "[,abcdefghijklmnopqrstuvwxyz]")
+
+#	gsub(",", "", dd[[20]]) -> tested_str
+#	gsub("a", "", tested_str) -> tested_str
+#	gsub("b", "", tested_str) -> tested_str
+#	gsub("c", "", tested_str) -> tested_str
+#	gsub("d", "", tested_str) -> tested_str
+#	gsub("e", "", tested_str) -> tested_str
+#	gsub("f", "", tested_str) -> tested_str
 
 
 	tested_int <- c(rep(0, 6), diff(as.numeric(tested_str[7:(n-4)])))
@@ -423,7 +426,10 @@ read_data_wiki <- function() {
 	tested_actual <- tested_int[29:(n-5)]
 	cases_actual <- cases_int[29:(n-5)]
 
-	gsub(",", "", dd[[15]]) -> deaths_str
+	deaths_str <- str_remove_all(dd[[15]], "[,abcdefghijklmnopqrstuvwxyz]")
+
+
+#	gsub(",", "", dd[[15]]) -> deaths_str
 	deaths_actual <- as.numeric(deaths_str[37:(n-5)])
 	
 	m <- length(deaths_actual)
@@ -494,7 +500,7 @@ read_data_covid <- function() {
 
 
 
-robust.not <- function(x, tries = 9, num.zero = 10^(-10)) {
+robust.not <- function(x, tries = 19, num.zero = 10^(-10)) {
 	
 	cpts <- rep(0, tries)
 	
@@ -560,9 +566,11 @@ fcast_cases <- function() {
 	
 }
 
+dd <- fcast_cases()
 
 
-ui <- fluidPage(
+ui <- function(req) {
+	fluidPage(
 
   titlePanel("Trends and next day forecasts for the number of detected Covid-19 cases in the UK"),
 
@@ -602,6 +610,7 @@ radioButtons("radio", h3("Trend estimates (see the bottom of the page for refere
     )
   )
 )
+}
 
 
 server <- function(input, output) {
