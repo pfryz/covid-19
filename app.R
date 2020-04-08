@@ -423,14 +423,14 @@ read_data_wiki <- function() {
 
 	tested_int <- c(rep(0, 6), diff(as.numeric(tested_str[7:(n-4)])))
 
-	tested_actual <- tested_int[29:(n-5)]
-	cases_actual <- cases_int[29:(n-5)]
+	tested_actual <- tested_int[30:(n-5)]
+	cases_actual <- cases_int[30:(n-5)]
 
 	deaths_str <- str_remove_all(dd[[15]], "[,abcdefghijklmnopqrstuvwxyz]")
 
 
 #	gsub(",", "", dd[[15]]) -> deaths_str
-	deaths_actual <- as.numeric(deaths_str[37:(n-5)])
+	deaths_actual <- as.numeric(deaths_str[38:(n-5)])
 	
 	m <- length(deaths_actual)
 	if (is.na(deaths_actual[m])) deaths_actual <- deaths_actual[1:(m-1)]
