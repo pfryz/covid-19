@@ -471,12 +471,25 @@ read_data_emma_secure <- function() {
 	
 }
 
+read_data_manual <- function() {
+	
+tested_actual <- 
+c(1296,  1497,  1267,  1775,   386,  2748,  1424,  2255,  1122,  2053,  1447,  1301,  1215,  1698,  3597,  4975,  2533,  3826,  6337,  5779,  8400,  2355,  5842,  5522,  5605,  6491,  6583,  7847, 8911,  6999,  6961,  7209,  8240,  9793, 10215, 10590,  9406, 12334, 13313, 10912, 12959, 10713)
+
+cases_actual <- c(5,    3,   12,    4,   12,   36,   29,   48,   45,   69,   43,   61,   78,  136,  202,  342,  251,  152,  407,  676,  643,  714, 1035,  665,  967, 1427, 1452, 2129, 2885, 2546, 2433, 2619, 3009, 4324, 4244, 4450, 3735, 5903, 3802, 3634, 5492, 4344)
+
+deaths_actual <- c(1,   0,   1,   2,   1,   2,   2,   1,  10,  14,  20,  16,  32,  41,  33,  56,  48,  54,  87, 156, 181, 260, 209, 180, 381, 563, 569, 684, 708, 621, 439, 786, 938, 881)
+
+		list(tested_actual=tested_actual, cases_actual=cases_actual, deaths_actual=deaths_actual)
+	
+}
 
 
 read_data_covid <- function() {
 	
 #	d_emma <- read_data_emma_secure()
-	d_wiki <- read_data_wiki_secure()
+#	d_wiki <- read_data_wiki_secure()
+	d_wiki <- read_data_manual()
 		
 #	if (length(d_emma$deaths_actual) > length(d_wiki$deaths_actual))
 #		deaths_actual <- d_emma$deaths_actual
