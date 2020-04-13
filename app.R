@@ -287,7 +287,19 @@ mean.from.cpt <- function(x, cpt) {
 }
 
 
+all.intervals <- function(n) {
+	
+	M <- (n-1)*n/2
+	
+	ind <- matrix(0, M, 2)
 
+	ind[,1] <- rep(1:(n-1), (n-1):1)
+
+	ind[,2] <- 2:(M+1) - rep(cumsum(c(0, (n-2):1)), (n-1):1)
+	
+	ind
+
+}
 
 
 random.cusums <- function(x, M) {
@@ -517,33 +529,38 @@ read_data_covid <- function() {
 
 
 
-robust.not <- function(x, tries = 19, num.zero = 10^(-10)) {
-	
-	cpts <- rep(0, tries)
-	
-	sols <- matrix(0, tries, length(x))
-	
-	
-	
-	for (i in 1:tries) {
-		sols[i,] <- predict(not(x, contrast="pcwsLinContMean"))
-		cpts[i] <- sum(abs(diff(diff(sols[i,]))) > num.zero)
-		
-	}
+#robust.not <- function(x, tries = 19, num.zero = 10^(-10)) {
+#	
+#	cpts <- rep(0, tries)
+#	
+#	sols <- matrix(0, tries, length(x))
+#	
+#	
+#	
+#	for (i in 1:tries) {
+#		sols[i,] <- predict(not(x, contrast="pcwsLinContMean"))
+#		cpts[i] <- sum(abs(diff(diff(sols[i,]))) > num.zero)
+#		
+#	}
+#
+#	no.of.cpt <- sort(cpts)[ceiling(tries/2)]
+#	fsols <- sols[cpts == no.of.cpt, , drop=F]
+#	
+#	no.of.fsols <- dim(fsols)[1]
+#
+#	mses <- rep(0, no.of.fsols)
+#	
+#	for (i in 1:no.of.fsols) mses[i] <- sum((x - fsols[i,])^2)
+#
+#	fsols[which.min(mses),]
+#
+#}
 
-	no.of.cpt <- sort(cpts)[ceiling(tries/2)]
-	fsols <- sols[cpts == no.of.cpt, , drop=F]
+robust.not <- function(x) {
 	
-	no.of.fsols <- dim(fsols)[1]
-
-	mses <- rep(0, no.of.fsols)
+	predict(not(x, contrast="pcwsLinContMean", rand.intervals=F, intervals=all.intervals(length(x))))
 	
-	for (i in 1:no.of.fsols) mses[i] <- sum((x - fsols[i,])^2)
-
-	fsols[which.min(mses),]
-
 }
-
 
 
 
