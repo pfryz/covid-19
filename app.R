@@ -532,7 +532,15 @@ robust.not <- function(x, tries = 19, num.zero = 10^(-10)) {
 	}
 
 	no.of.cpt <- sort(cpts)[ceiling(tries/2)]
-	sols[which.min(abs(cpts - no.of.cpt)), ]
+	fsols <- sols[cpts == no.of.cpt, , drop=F]
+	
+	no.of.fsols <- dim(fsols)[1]
+
+	mses <- rep(0, no.of.fsols)
+	
+	for (i in 1:no.of.fsols) mses[i] <- sum((x - fsols[i,])^2)
+
+	fsols[which.min(mses),]
 
 }
 
