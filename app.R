@@ -486,15 +486,17 @@ read_data_emma_secure <- function() {
 read_data_manual <- function() {
 	
 tested_actual <- 
-c(1296,  1497,  1267,  1775,   386,  2748,  1424,  2255,  1122,  2053,  1447,  1301,  1215,  1698,  3597,  4975,  2533,  3826,  6337,  5779,  8400,  2355,  5842,  5522,  5605,  6491,  6583,  7847, 8911,  6999,  6961,  7209,  8240,  9793, 10215, 10590,  9406, 12334, 13313, 10912, 12959, 10713, 13543, 12993, 12776, 10745, 11879, 11170, 13839, 13943, 15472, 15944, 14106, 11626, 13522, 14629, 18401, 23115, 25577, 26355, 29571)
+c(1296,  1497,  1267,  1775,   386,  2748,  1424,  2255,  1122,  2053,  1447,  1301,  1215,  1698,  3597,  4975,  2533,  3826,  6337,  5779,  8400,  2355,  5842,  5522,  5605,  6491,  6583,  7847, 8911,  6999,  6961,  7209,  8240,  9793, 10215, 10590,  9406, 12334, 13313, 10912, 12959, 10713, 13543, 12993, 12776, 10745, 11879, 11170, 13839, 13943, 15472, 15944, 14106, 11626, 13522, 14629, 18401, 23115, 25577, 26355, 29571, 33455)
 
-cases_actual <- c(5,    3,   12,    4,   12,   36,   29,   48,   45,   69,   43,   61,   78,  136,  202,  342,  251,  152,  407,  676,  643,  714, 1035,  665,  967, 1427, 1452, 2129, 2885, 2546, 2433, 2619, 3009, 4324, 4244, 4450, 3735, 5903, 3802, 3634, 5492, 4344, 5706, 5234, 5288, 4342, 5252, 4605, 4618, 5599, 5526, 5850, 4676, 4301, 4451, 4583, 5386, 4913, 4463, 4310, 3996)
+cases_actual <- c(5,    3,   12,    4,   12,   36,   29,   48,   45,   69,   43,   61,   78,  136,  202,  342,  251,  152,  407,  676,  643,  714, 1035,  665,  967, 1427, 1452, 2129, 2885, 2546, 2433, 2619, 3009, 4324, 4244, 4450, 3735, 5903, 3802, 3634, 5492, 4344, 5706, 5234, 5288, 4342, 5252, 4605, 4618, 5599, 5526, 5850, 4676, 4301, 4451, 4583, 5386, 4913, 4463, 4310, 3996, 4076)
 
 extra_cases <- c(5, 10, 69, 46, 241, 243, 278, 222, 265, 296, 341, 254, 374, 331)
 
 cases_actual[29:(29+14-1)] <- cases_actual[29:(29+14-1)] + extra_cases
 
-deaths_actual <- c(1,   0,   1,   2,   1,   2,   2,   1,  10,  14,  20,  16,  32,  41,  33,  56,  48,  54,  87, 156, 181, 260, 209, 180, 381, 563, 569, 684, 708, 621, 439, 786, 938, 881, 980, 917, 737, 717, 778, 761, 861, 847, 888, 596, 449, 823, 759, 616, 684, 813, 413, 360, 586)
+#deaths_actual <- c(1,   0,   1,   2,   1,   2,   2,   1,  10,  14,  20,  16,  32,  41,  33,  56,  48,  54,  87, 156, 181, 260, 209, 180, 381, 563, 569, 684, 708, 621, 439, 786, 938, 881, 980, 917, 737, 717, 778, 761, 861, 847, 888, 596, 449, 823, 759, 616, 684, 813, 413, 360, 586, 765)
+
+deaths_actual <- c(1,    1,    0,    1,    4,    0,    2,    1,   18,   15,   22,   16,   34,   43,   36,   56,   35,   74,  149,  186,  183,  284,  294,  214,  374,  382,  670,  652,  714,  760,  644,  568, 1038, 1034, 1103, 1152,  839,  686,  744, 1044,  842, 1029,  935, 1115,  498,  559, 1172,  837,  727, 1005,  843,  420,  338,  909,  765)
 
 		list(tested_actual=tested_actual, cases_actual=cases_actual, deaths_actual=deaths_actual)
 	
@@ -632,7 +634,7 @@ radioButtons("radio", h3("Trend estimates (see the bottom of the page for refere
 
     mainPanel(
 
-	h4("Last updated 28 April 2020"),
+	h4("Last updated 29 April 2020"),
 	h3(textOutput("f_tests")),
 	h3(textOutput("f_prop")),
 	h3(textOutput("f_cases")),
@@ -644,7 +646,7 @@ radioButtons("radio", h3("Trend estimates (see the bottom of the page for refere
 			h6("[piecewise linear trend] R. Baranowski, Y. Chen and P. Fryzlewicz (2019), ", tags$a(href="https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssb.12322", "Narrowest‐over‐threshold detection of multiple change points and change‐point‐like features"), ", JRSSB, 81, 649-672"),
 			h6("[smoothly varying trend] R package ", tags$a(href="https://CRAN.R-project.org/package=forecast", "forecast")),
 			h6("[piecewise constant trend] P. Fryzlewicz (2020), ", tags$a(href="https://link.springer.com/article/10.1007/s42952-020-00060-x", "Detecting possibly frequent change-points: Wild Binary Segmentation 2 and steepest-drop model selection"), ", JKSS, to appear"),
-						h6("[data source]", tags$a(href="https://www.gov.uk/guidance/coronavirus-covid-19-information-for-the-public#number-of-cases", "Department of Health and Social Care and Public Health England")),
+						h6("[data source]", tags$a(href="https://twitter.com/dhscgovuk?lang=en", "Department of Health and Social Care")),
 #			h6("[data sources]", tags$a(href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_Kingdom", "https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_Kingdom"), "and", tags$a(href="https://github.com/emmadoughty/Daily_COVID-19/blob/master/Data/COVID19_by_day.csv", "https://github.com/emmadoughty/Daily_COVID-19/blob/master/Data/COVID19_by_day.csv")),
 			h6("[this app]", tags$a(href="https://github.com/pfryz/covid-19", "https://github.com/pfryz/covid-19")),
 			h6("[author]", tags$a(href="http://stats.lse.ac.uk/fryzlewicz/", "Piotr Fryzlewicz"))
