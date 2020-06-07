@@ -635,6 +635,7 @@ radioButtons("radio", h3("Trend estimates (see the bottom of the page for refere
     mainPanel(
 
 	h4("Last updated 6 June 2020"),
+	h4("On 7 June 2020, the UK government stopped reporting the daily number of people tested, and as a result, this app will no longer be updated from this date onwards. (The daily number of tests, a larger figure, is still reported.)", style = "color:red"),
 	h3(textOutput("f_tests")),
 	h3(textOutput("f_prop")),
 	h3(textOutput("f_cases")),
